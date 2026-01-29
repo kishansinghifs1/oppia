@@ -70,6 +70,8 @@ describe('Subtopic viewer navbar breadcrumb component', function () {
                         voiceovers_mapping: {},
                       },
                     },
+                    sections: null,
+                    current_subtopic_id: 1,
                     next_subtopic_dict: null,
                     prev_subtopic_dict: null,
                     topic_id: 'topic_1',

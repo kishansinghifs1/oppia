@@ -30,7 +30,7 @@ import {EventEmitter} from '@angular/core';
 describe('Topic Preview Tab Component', () => {
   let fixture: ComponentFixture<TopicPreviewTabComponent>;
   let componentInstance: TopicPreviewTabComponent;
-  let mockTranslateService: jasmine.SpyObj<TranslateService>;
+  let mockTranslateService: MockTranslateService;
   let testName = 'test_name';
   let mockUrl = 'mock_url';
   let topicUrl = 'topic_1';
@@ -46,6 +46,7 @@ describe('Topic Preview Tab Component', () => {
       [],
       'url',
       [],
+      '',
       '',
       '',
       '',
@@ -100,11 +101,19 @@ describe('Topic Preview Tab Component', () => {
     }
   }
 
+  let mockTopicEditorStateService: MockTopicEditorStateService;
+
+  class MockTranslateService {
+    onLangChange: EventEmitter<string> = new EventEmitter();
+    instant(key: string, interpolateParams?: Object): string {
+      return key;
+    }
+  }
+
   beforeEach(waitForAsync(() => {
-    mockTranslateService = jasmine.createSpyObj('TranslateService', [
-      'instant',
-    ]);
-    mockTranslateService.onLangChange = new EventEmitter();
+    mockTopicEditorStateService = new MockTopicEditorStateService();
+    mockTranslateService = new MockTranslateService();
+    spyOn(mockTranslateService, 'instant').and.callThrough();
 
     TestBed.configureTestingModule({
       imports: [
@@ -116,7 +125,7 @@ describe('Topic Preview Tab Component', () => {
       providers: [
         {
           provide: TopicEditorStateService,
-          useClass: MockTopicEditorStateService,
+          useValue: mockTopicEditorStateService,
         },
         {
           provide: UrlInterpolationService,
@@ -165,19 +174,15 @@ describe('Topic Preview Tab Component', () => {
   });
 
   it('should return true when practiceTabIsDisplayed is true', () => {
-    (
-      componentInstance.topicEditorStateService as MockTopicEditorStateService
-    ).setPracticeTabDisplayed(true);
+    mockTopicEditorStateService.setPracticeTabDisplayed(true);
     componentInstance.ngOnInit();
-    expect(componentInstance.isPracticeTabEnabled()).toBeTrue();
+    expect(componentInstance.isPracticeTabEnabled()).toBe(true);
   });
 
   it('should return false when practiceTabIsDisplayed is false', () => {
-    (
-      componentInstance.topicEditorStateService as MockTopicEditorStateService
-    ).setPracticeTabDisplayed(false);
+    mockTopicEditorStateService.setPracticeTabDisplayed(false);
     componentInstance.ngOnInit();
-    expect(componentInstance.isPracticeTabEnabled()).toBeFalse();
+    expect(componentInstance.isPracticeTabEnabled()).toBe(false);
   });
 
   it('should update page title on language change', () => {

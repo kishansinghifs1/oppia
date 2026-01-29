@@ -45,7 +45,7 @@ describe('SubtopicPreviewTab', () => {
   let topicEditorStateService: TopicEditorStateService;
   let topicEditorRoutingService: TopicEditorRoutingService;
   let windowDimensionsService: WindowDimensionsService;
-  let platformFeatureService: PlatformFeatureService;
+  let mockPlatformFeatureService: MockPlatformFeatureService;
   let subtopicPage: SubtopicPage;
   let subtopic: Subtopic;
   let topic: Topic;
@@ -75,6 +75,8 @@ describe('SubtopicPreviewTab', () => {
   let studyGuideLoadedEventEmitter = new EventEmitter();
 
   beforeEach(async(() => {
+    mockPlatformFeatureService = new MockPlatformFeatureService();
+
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       declarations: [SubtopicPreviewTab],
@@ -84,7 +86,7 @@ describe('SubtopicPreviewTab', () => {
         WindowDimensionsService,
         {
           provide: PlatformFeatureService,
-          useClass: MockPlatformFeatureService,
+          useValue: mockPlatformFeatureService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],
@@ -99,7 +101,6 @@ describe('SubtopicPreviewTab', () => {
     topicEditorStateService = TestBed.get(TopicEditorStateService);
     topicEditorRoutingService = TestBed.get(TopicEditorRoutingService);
     windowDimensionsService = TestBed.get(WindowDimensionsService);
-    platformFeatureService = TestBed.get(PlatformFeatureService);
 
     fixture = TestBed.createComponent(SubtopicPreviewTab);
     component = fixture.componentInstance;
@@ -171,7 +172,7 @@ describe('SubtopicPreviewTab', () => {
     spyOn(windowDimensionsService, 'isWindowNarrow').and.returnValue(false);
 
     // Default to feature flag disabled.
-    platformFeatureService.status = {
+    mockPlatformFeatureService.status = {
       ShowRestructuredStudyGuides: {
         isEnabled: false,
       },
@@ -180,7 +181,7 @@ describe('SubtopicPreviewTab', () => {
 
   describe('when ShowRestructuredStudyGuides feature is disabled', () => {
     beforeEach(() => {
-      platformFeatureService.status.ShowRestructuredStudyGuides.isEnabled =
+      mockPlatformFeatureService.status.ShowRestructuredStudyGuides.isEnabled =
         false;
     });
 
@@ -265,7 +266,7 @@ describe('SubtopicPreviewTab', () => {
 
   describe('when ShowRestructuredStudyGuides feature is enabled', () => {
     beforeEach(() => {
-      platformFeatureService.status.ShowRestructuredStudyGuides.isEnabled =
+      mockPlatformFeatureService.status.ShowRestructuredStudyGuides.isEnabled =
         true;
     });
 
@@ -348,10 +349,12 @@ describe('SubtopicPreviewTab', () => {
   });
 
   it('should return correct value for isShowRestructuredStudyGuidesFeatureEnabled', () => {
-    platformFeatureService.status.ShowRestructuredStudyGuides.isEnabled = true;
+    mockPlatformFeatureService.status.ShowRestructuredStudyGuides.isEnabled =
+      true;
     expect(component.isShowRestructuredStudyGuidesFeatureEnabled()).toBe(true);
 
-    platformFeatureService.status.ShowRestructuredStudyGuides.isEnabled = false;
+    mockPlatformFeatureService.status.ShowRestructuredStudyGuides.isEnabled =
+      false;
     expect(component.isShowRestructuredStudyGuidesFeatureEnabled()).toBe(false);
   });
 

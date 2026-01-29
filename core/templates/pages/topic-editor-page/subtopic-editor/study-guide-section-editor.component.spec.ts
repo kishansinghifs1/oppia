@@ -24,11 +24,19 @@ import {StudyGuide} from 'domain/topic/study-guide.model';
 import {StudyGuideSection} from 'domain/topic/study-guide-sections.model';
 import {TopicEditorStateService} from '../services/topic-editor-state.service';
 import {StudyGuideSectionEditorComponent} from './study-guide-section-editor.component';
-import {HtmlLengthService} from 'services/html-length.service';
+import {
+  HtmlLengthService,
+  CALCULATION_TYPE_CHARACTER,
+  CALCULATION_TYPE_WORD,
+} from 'services/html-length.service';
 import {PlatformFeatureService} from 'services/platform-feature.service';
 
+type CalculationType =
+  | typeof CALCULATION_TYPE_WORD
+  | typeof CALCULATION_TYPE_CHARACTER;
+
 class MockHtmlLengthService {
-  computeHtmlLength(html: string, calculationType: string): number {
+  computeHtmlLength(html: string, calculationType: CalculationType): number {
     return html.length;
   }
 }
@@ -47,7 +55,7 @@ describe('Study Guide Section editor component', () => {
   let topicEditorStateService: TopicEditorStateService;
   let topicUpdateService: TopicUpdateService;
   let sampleStudyGuide: StudyGuide;
-  let htmlLengthService: HtmlLengthService;
+  let htmlLengthService: MockHtmlLengthService;
   let platformFeatureService: PlatformFeatureService;
 
   beforeEach(waitForAsync(() => {
@@ -83,17 +91,13 @@ describe('Study Guide Section editor component', () => {
       '10',
       'topic1',
       [
-        {
-          heading: {
-            content_id: 'section_heading_0',
-            unicode_str: 'section heading',
-          },
-          content: {
-            content_id: 'section_content_1',
-            html: '<p>section content</p>',
-          },
-        },
-      ] as StudyGuideSection[],
+        StudyGuideSection.create(
+          'section heading',
+          '<p>section content</p>',
+          'section_heading_0',
+          'section_content_1'
+        ),
+      ],
       2,
       'en'
     );
@@ -103,21 +107,12 @@ describe('Study Guide Section editor component', () => {
 
     component.isEditable = true;
     component.index = 2;
-    component.section = {
-      getHeadingText(): object {
-        return {
-          unicode_str: 'heading',
-          content_id: 'section_heading_0',
-        };
-      },
-
-      getContentHtml(): object {
-        return {
-          html: 'content',
-          content_id: 'section_content_1',
-        };
-      },
-    } as StudyGuideSection;
+    component.section = StudyGuideSection.create(
+      'heading',
+      'content',
+      'section_heading_0',
+      'section_content_1'
+    );
     component.ngOnInit();
   });
 
@@ -189,10 +184,7 @@ describe('Study Guide Section editor component', () => {
   });
 
   it('should save study guide section when clicking on save button', () => {
-    let sectionUpdateSpy = spyOn(
-      topicUpdateService,
-      'updateSection'
-    ).and.returnValue();
+    let sectionUpdateSpy = spyOn(topicUpdateService, 'updateSection');
 
     component.saveSection(true);
 

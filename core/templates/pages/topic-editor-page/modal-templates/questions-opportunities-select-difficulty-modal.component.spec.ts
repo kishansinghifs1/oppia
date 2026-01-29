@@ -148,6 +148,7 @@ describe('Questions Opportunities Select Difficulty Modal Component', () => {
         superseding_skill_id: 'skill',
       });
 
+      mockBlob = new Blob(['test content'], {type: 'image/png'});
       mockImageFile = new ImageFile('dummyImg.png', mockBlob);
       spyOn(
         extractImageFilenamesFromModelService,
@@ -160,7 +161,6 @@ describe('Questions Opportunities Select Difficulty Modal Component', () => {
       // to parameter of type 'FileReader'.". We need to suppress this error
       // because 'FileReader' has around 15 more properties. We have only
       // defined the properties we need in 'MockReaderObject'.
-      // @ts-expect-error
       spyOn(window, 'FileReader').and.returnValue(new MockReaderObject());
     });
 

@@ -52,7 +52,7 @@ describe('Add Study Guide Section Modal Component', () => {
   let component: AddStudyGuideSectionModalComponent;
   let fixture: ComponentFixture<AddStudyGuideSectionModalComponent>;
   let ngbActiveModal: NgbActiveModal;
-  let htmlLengthService: HtmlLengthService;
+  let htmlLengthService: MockHtmlLengthService;
   let platformFeatureService: PlatformFeatureService;
 
   beforeEach(waitForAsync(() => {
