@@ -191,14 +191,8 @@ describe('Study Guide Section editor component', () => {
     expect(sectionUpdateSpy).toHaveBeenCalledWith(
       sampleStudyGuide,
       2,
-      {
-        content_id: 'section_heading_0',
-        unicode_str: 'heading',
-      },
-      {
-        content_id: 'section_content_1',
-        html: 'content',
-      },
+      'heading',
+      'content',
       10
     );
 
@@ -207,14 +201,8 @@ describe('Study Guide Section editor component', () => {
     expect(sectionUpdateSpy).toHaveBeenCalledWith(
       sampleStudyGuide,
       2,
-      {
-        content_id: 'section_heading_0',
-        unicode_str: 'heading',
-      },
-      {
-        content_id: 'section_content_1',
-        html: 'content',
-      },
+      'heading',
+      'content',
       10
     );
   });
