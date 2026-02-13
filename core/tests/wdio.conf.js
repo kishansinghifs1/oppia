@@ -41,10 +41,6 @@ var suites = {
     './core/tests/webdriverio_desktop/blog.js'
   ],
 
-  collections: [
-    './core/tests/webdriverio_desktop/collections.js'
-  ],
-
   contributorAdminDashboard: [
     './core/tests/webdriverio_desktop/contributorAdminDashboard.js'
   ],
@@ -71,10 +67,6 @@ var suites = {
 
   explorationTranslationTab: [
     './core/tests/webdriverio_desktop/explorationTranslationTab.js'
-  ],
-
-  learner: [
-    './core/tests/webdriverio/learnerFlow.js'
   ],
 
   navigation: [

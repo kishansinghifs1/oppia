@@ -73,7 +73,6 @@
         "additionalPlayerFeatures.js",
         "adminTabFeatures.js",
         "classroomPage.js",
-        "collections.js",
         "contributorDashboard.js",
         "coreEditorAndPlayerFeatures.js",
         "creatorDashboard.js",
@@ -100,7 +99,6 @@
         "voiceoverUploadFeatures.js",
         "wipeout.js",
         "accessibility.js",
-        "learnerFlow.js",
         "libraryFlow.js",
         "profileMenuFlow.js",
         "excludedForTesting.js"
